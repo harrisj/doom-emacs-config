@@ -132,6 +132,7 @@ ophints                      ; highlight the region an operation acts on
  +all                        ; catch all popups that start with an asterix
  +defaults)                  ; default popup rules
 workspaces                   ; tab emulation, persistence & separate workspaces
+;; tabs
 (treemacs +lsp)              ; Tree view
 unicode
 (vc-gutter +pretty)
@@ -144,10 +145,10 @@ zen                          ; distraction-free coding or writing
 #+name: doom-editor
 #+begin_src emacs-lisp
 (evil +everywhere)           ; come to the dark side, we have cookies
-
+file-templates
 format                       ; automated prettiness
 snippets
-;;word-wrap
+word-wrap
 #+end_src
 
 #+name: doom-emacs
@@ -280,7 +281,7 @@ emacs-lisp                   ; drown in parentheses
 ;;solidity                   ; do you need a blockchain? No.
 ;;swift                      ; who asked for emoji variables?
 ;;terra                      ; Earth and Moon in alignment for performance.
-;;(web +lsp)                 ; the tubes
+(web +lsp)                 ; the tubes
 (yaml +lsp)                  ; JSON, but readable
 ;;zig                        ; C, but simpler
 #+end_src
@@ -296,7 +297,7 @@ emacs-lisp                   ; drown in parentheses
 ;;calendar                   ; A dated approach to timetabling
 ;;emms                       ; Multimedia in Emacs is music to my ears
 ;;everywhere                 ; *leave* Emacs!? You must be joking.
-;;(rss +org)                   ; emacs as an RSS reader
+(rss +org)                   ; emacs as an RSS reader
 #+end_src
 
 ** Additional Doom Packages
@@ -366,6 +367,10 @@ Let's style this editor (well, more than what Doom does already)
 
 (package! svg-tag-mode)
 
+(package! vundo
+  :recipe (:host github
+           :repo "casouri/vundo")
+  :pin "10d5debe317b2244d19085151040f955dda4a9ab")
 #+end_src
 
 *** Emacs
@@ -381,6 +386,11 @@ Emacs is missing just a few packages to improve things here and there. Mainly
 (package! lexic)
 (package! info-colors)
 (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta"))
+
+(package! magit-pretty-graph
+  :recipe (:host github
+           :repo "georgek/magit-pretty-graph")
+  :pin "26dc5535a20efe781b172bac73f14a5ebe13efa9")
 #+end_src
 
 *** Fun
@@ -392,6 +402,14 @@ Some fun packages
 #+end_src
 
 * Basic Configuration
+
+** Temporary Bug Fix
+To fix the error "Warning (comp): ld: warning: -undefined dynamic_lookup may not work with chained fixups"
+#+begin_src emacs-lisp
+(when (eq system-type 'darwin) (customize-set-variable 'native-comp-driver-options '("-Wl,-w")))
+#+end_src
+
+
 ** Customizations
 Customizations done through the emacs gui should go into their own file, in my
 doom-dir.
@@ -429,22 +447,58 @@ Of course we need to tell emacs who I am
 (setq modus-themes-italic-constructs t
       modus-themes-bold-constructs nil
       modus-themes-region '(bg-only no-extend)
-      modus-themes-mixed-fonts nil
-      modus-themes-subtle-line-numbers nil
-      modus-themes-intense-mouseovers nil
       modus-themes-syntax '(faint alt-syntax)
+      modus-themes-org-blocks 'gray-background
       modus-themes-tabs-accented t
-      modus-themes-variable-pitch-ui nil
-      modus-themes-lang-checkers nil
-      modus-themes-paren-match '(bold intense)
-      )
+      modus-themes-hl-line nil
+      modus-themes-paren-match '(bold intense))
 
-;; Load the theme files before enabling a theme
-(modus-themes-load-themes)
+(defun +modus-themes-tweak-packages ()
+    (modus-themes-with-colors
+      (set-face-attribute 'cursor nil :background (modus-themes-color 'blue))
+      (set-face-attribute 'font-lock-type-face nil :foreground (modus-themes-color 'magenta-alt))
+      (custom-set-faces
+       ;; Tweak `evil-mc-mode'
+       `(evil-mc-cursor-default-face ((,class :background ,magenta-intense-bg)))
+       ;; Tweak `git-gutter-mode'
+       `(git-gutter-fr:added ((,class :foreground ,green-fringe-bg)))
+       `(git-gutter-fr:deleted ((,class :foreground ,red-fringe-bg)))
+       `(git-gutter-fr:modified ((,class :foreground ,yellow-fringe-bg)))
+       ;; Tweak `doom-modeline'
+       `(doom-modeline-evil-normal-state ((,class :foreground ,green-alt-other)))
+       `(doom-modeline-evil-insert-state ((,class :foreground ,red-alt-other)))
+       `(doom-modeline-evil-visual-state ((,class :foreground ,magenta-alt)))
+       `(doom-modeline-evil-operator-state ((,class :foreground ,blue-alt)))
+       `(doom-modeline-evil-motion-state ((,class :foreground ,blue-alt-other)))
+       `(doom-modeline-evil-replace-state ((,class :foreground ,yellow-alt)))
+       ;; Tweak `diff-hl-mode'
+       `(diff-hl-insert ((,class :foreground ,green-fringe-bg)))
+       `(diff-hl-delete ((,class :foreground ,red-fringe-bg)))
+       `(diff-hl-change ((,class :foreground ,yellow-fringe-bg)))
+       ;; Tweak `solaire-mode'
+       `(solaire-default-face ((,class :inherit default :background ,bg-alt :foreground ,fg-dim)))
+       `(solaire-line-number-face ((,class :inherit solaire-default-face :foreground ,fg-unfocused)))
+       `(solaire-hl-line-face ((,class :background ,bg-active)))
+       `(solaire-org-hide-face ((,class :background ,bg-alt :foreground ,bg-alt)))
+       ;; Tweak `display-fill-column-indicator-mode'
+       `(fill-column-indicator ((,class :height 0.3 :background ,bg-inactive :foreground ,bg-inactive)))
+       ;; Tweak `mmm-mode'
+       `(mmm-cleanup-submode-face ((,class :background ,yellow-refine-bg)))
+       `(mmm-code-submode-face ((,class :background ,bg-active)))
+       `(mmm-comment-submode-face ((,class :background ,blue-refine-bg)))
+       `(mmm-declaration-submode-face ((,class :background ,cyan-refine-bg)))
+       `(mmm-default-submode-face ((,class :background ,bg-alt)))
+       `(mmm-init-submode-face ((,class :background ,magenta-refine-bg)))
+       `(mmm-output-submode-face ((,class :background ,red-refine-bg)))
+       `(mmm-special-submode-face ((,class :background ,green-refine-bg))))))
+
+(add-hook 'modus-themes-after-load-theme-hook #'+modus-themes-tweak-packages)
 
 (defun my/apply-theme (appearance)
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
+
+  (modus-themes-load-themes)
 
   (pcase appearance
     ('light (modus-themes-load-operandi))
@@ -593,6 +647,86 @@ I think company is a bit too quick to recommend some stuff
       company-files)))
 #+end_src
 
+Let's also ignore org-mode
+
+#+begin_src emacs-lisp
+(setq company-global-modes
+      '(not erc-mode
+            circe-mode
+            message-mode
+            help-mode
+            gud-mode
+            vterm-mode
+            org-mode))
+#+end_src
+
+** Treemacs
+Let's ignore some file types
+
+#+begin_src emacs-lisp
+(after! treemacs
+  (require 'dired)
+
+  ;; My custom stuff (from tecosaur's config)
+  (setq +treemacs-file-ignore-extensions
+        '(;; LaTeX
+          "aux" "ptc" "fdb_latexmk" "fls" "synctex.gz" "toc"
+          ;; LaTeX - bibliography
+          "bbl"
+          ;; LaTeX - glossary
+          "glg" "glo" "gls" "glsdefs" "ist" "acn" "acr" "alg"
+          ;; LaTeX - pgfplots
+          "mw"
+          ;; LaTeX - pdfx
+          "pdfa.xmpi"
+          ;; Python
+          "pyc"))
+
+  (setq +treemacs-file-ignore-globs
+        '(;; LaTeX
+          "*/_minted-*"
+          ;; AucTeX
+          "*/.auctex-auto"
+          "*/_region_.log"
+          "*/_region_.tex"
+          ;; Python
+          "*/__pycache__"))
+
+  ;; Reload treemacs theme
+  (setq doom-themes-treemacs-enable-variable-pitch nil
+        doom-themes-treemacs-theme "doom-colors")
+  (doom-themes-treemacs-config)
+
+  (setq treemacs-show-hidden-files nil
+        treemacs-hide-dot-git-directory t
+        treemacs-width 30)
+
+  (defvar +treemacs-file-ignore-extensions '()
+    "File extension which `treemacs-ignore-filter' will ensure are ignored")
+
+  (defvar +treemacs-file-ignore-globs '()
+    "Globs which will are transformed to `+treemacs-file-ignore-regexps' which `+treemacs-ignore-filter' will ensure are ignored")
+
+  (defvar +treemacs-file-ignore-regexps '()
+    "RegExps to be tested to ignore files, generated from `+treeemacs-file-ignore-globs'")
+
+  (defun +treemacs-file-ignore-generate-regexps ()
+    "Generate `+treemacs-file-ignore-regexps' from `+treemacs-file-ignore-globs'"
+    (setq +treemacs-file-ignore-regexps (mapcar 'dired-glob-regexp +treemacs-file-ignore-globs)))
+
+  (unless (equal +treemacs-file-ignore-globs '())
+    (+treemacs-file-ignore-generate-regexps))
+
+  (defun +treemacs-ignore-filter (file full-path)
+    "Ignore files specified by `+treemacs-file-ignore-extensions', and `+treemacs-file-ignore-regexps'"
+    (or (member (file-name-extension file) +treemacs-file-ignore-extensions)
+        (let ((ignore-file nil))
+          (dolist (regexp +treemacs-file-ignore-regexps ignore-file)
+            (setq ignore-file (or ignore-file (if (string-match-p regexp full-path) t nil)))))))
+
+  (add-to-list 'treemacs-ignored-file-predicates #'+treemacs-ignore-filter))
+#+end_src
+
 ** Which Key
 
 First let's tweak the timing
@@ -609,6 +743,88 @@ Let's also suppress all the evil- everywhre
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
+#+end_src
+
+** Messages Auto-Tail
+Make the messages buffer always scroll to the tail
+
+#+begin_src emacs-lisp
+(defvar +messages--auto-tail-enabled nil)
+
+(defun +messages--auto-tail-a (&rest arg)
+  "Make *Messages* buffer auto-scroll to the end after each message."
+  (let* ((buf-name (buffer-name (messages-buffer)))
+         ;; Create *Messages* buffer if it does not exist
+         (buf (get-buffer-create buf-name)))
+    ;; Activate this advice only if the point is _not_ in the *Messages* buffer
+    ;; to begin with. This condition is required; otherwise you will not be
+    ;; able to use `isearch' and other stuff within the *Messages* buffer as
+    ;; the point will keep moving to the end of buffer :P
+    (when (not (string= buf-name (buffer-name)))
+      ;; Go to the end of buffer in all *Messages* buffer windows that are
+      ;; *live* (`get-buffer-window-list' returns a list of only live windows).
+      (dolist (win (get-buffer-window-list buf-name nil :all-frames))
+        (with-selected-window win
+          (goto-char (point-max))))
+      ;; Go to the end of the *Messages* buffer even if it is not in one of
+      ;; the live windows.
+      (with-current-buffer buf
+        (goto-char (point-max))))))
+
+(defun +messages-auto-tail-toggle ()
+  "Auto tail the '*Messages*' buffer."
+  (interactive)
+  (if +messages--auto-tail-enabled
+      (progn
+        (advice-remove 'message '+messages--auto-tail-a)
+        (setq +messages--auto-tail-enabled nil)
+        (message "+messages-auto-tail: Disabled."))
+    (advice-add 'message :after '+messages--auto-tail-a)
+    (setq +messages--auto-tail-enabled t)
+    (message "+messages-auto-tail: Enabled.")))
+#+end_src
+
+** Undo Improvements
+
+#+begin_src emacs-lisp
+;; Increase undo history limits even more
+(after! undo-fu
+  ;; Emacs undo defaults
+  (setq undo-limit        10000000    ;; 1MB   (default is 160kB, Doom's default is 400kB)
+        undo-strong-limit 100000000   ;; 100MB (default is 240kB, Doom's default is 3MB)
+        undo-outer-limit  1000000000) ;; 1GB   (default is 24MB,  Doom's default is 48MB)
+
+  ;; Undo-fu customization options
+  (setq undo-fu-allow-undo-in-region t ;; Undoing with a selection will use undo within that region.
+        undo-fu-ignore-keyboard-quit t)) ;; Use the `undo-fu-disable-checkpoint' command instead of Ctrl-G `keyboard-quit' for non-linear behavior.
+
+;; Evil undo
+(after! evil
+  (setq evil-want-fine-undo t)) ;; By default while in insert all changes are one big blob
+#+end_src
+
+** Visual Undo
+
+#+begin_src emacs-lisp
+(use-package! vundo
+  :defer t
+  :init
+  (defconst +vundo-unicode-symbols
+   '((selected-node   . ?●)
+     (node            . ?○)
+     (vertical-stem   . ?│)
+     (branch          . ?├)
+     (last-branch     . ?╰)
+     (horizontal-stem . ?─)))
+
+  (map! :leader
+        (:prefix ("o")
+         :desc "vundo" "v" #'vundo))
+
+  :config
+  (setq vundo-glyph-alist +vundo-unicode-symbols
+        vundo-compact-display t
+        vundo-window-max-height 6))
 #+end_src
 
 ** Projectile
@@ -664,6 +880,19 @@ distributions, but most reliably installed through Rust’s package manager carg
 #+begin_src emacs-lisp
 (after! magit
   (magit-delta-mode +1))
+
+(use-package! magit-pretty-graph
+  :after magit
+  :init
+  (setq magit-pg-command
+        (concat "git --no-pager log"
+                " --topo-order --decorate=full"
+                " --pretty=format:\"%H%x00%P%x00%an%x00%ar%x00%s%x00%d\""
+                " -n 2000")) ;; Increase the default 100 limit
+
+  (map! :localleader
+        :map (magit-mode-map)
+        :desc "Magit pretty graph" "p" (cmd! (magit-pg-repo (magit-toplevel)))))
 #+end_src
 
 ** Info Colors
@@ -751,6 +980,13 @@ To actually read the ebooks we use =nov=.
     (add-hook 'nov-mode-hook #'+nov-mode-setup)))
 #+end_src
 
+** Highlighting
+Disable hl-line-mode by default
+
+#+begin_src emacs-lisp
+(global-hl-line-mode 0)
+#+end_src
+
 * Org
 ** Basic Configuration
 #+begin_src emacs-lisp
@@ -761,7 +997,7 @@ To actually read the ebooks we use =nov=.
         org-use-property-inheritance t            ; it's convenient to have properties inherited
         org-catch-invisible-edits 'smart          ; try not to accidently do weird stuff in invisible regions
         org-log-done 'time                        ; having the time a item is done sounds convenient
-        org-roam-directory "~/org/roam/"        ; same thing, for roam
+        org-roam-directory "~/org/roam/"          ; same thing, for roam
 
         org-hide-emphasis-markers t
         org-pretty-entities t
@@ -827,16 +1063,55 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
 #+end_src
 
 ** Some Aesthetic Enhancements
+Many of these taken from Abdelhak's config
+
+First, adjust some sizes
+#+begin_src emacs-lisp
+(custom-set-faces!
+  '(org-document-title :height 1.2))
+
+(custom-set-faces!
+  '(outline-1 :weight extra-bold :height 1.25)
+  '(outline-2 :weight bold :height 1.15)
+  '(outline-3 :weight bold :height 1.12)
+  '(outline-4 :weight semi-bold :height 1.09)
+  '(outline-5 :weight semi-bold :height 1.06)
+  '(outline-6 :weight semi-bold :height 1.03)
+  '(outline-8 :weight semi-bold)
+  '(outline-9 :weight semi-bold))
+#+end_src
 
 #+begin_src emacs-lisp
-;;(use-package! org-pretty-table
-;;  :commands (org-pretty-table-mode global-org-pretty-table-mode))
 (use-package! org-modern
-  :hook (org-mode . global-org-modern-mode)
+  :hook (org-mode . org-modern-mode)
   :config
-  (setq org-modern-label-border 0.3))
+  (setq org-modern-table-vertical 2
+        org-modern-table-horizontal 4
+        org-modern-list '((43 . "➤") (45 . "–") (42 . "•"))
+        org-modern-footnote (cons nil (cadr org-script-display))
+        org-modern-priority t
+        org-modern-block t
+        org-modern-block-fringe 1
+        org-modern-horizontal-rule t)
 
+  ;; Change faces
+  (custom-set-faces! '(org-modern-tag :inherit (region org-modern-label)))
+  (custom-set-faces! '(org-modern-statistics :inherit org-checkbox-statistics-todo)))
 
+;; Handle collision with Doom ligatures
+;;(when (modulep! :ui ligatures)
+;;  (defadvice! +org-init-appearance-h--no-ligatures-a ()
+;;    :after #'+org-init-appearance-h
+;;    (set-ligatures! 'org-mode
+;;                    :name nil
+;;                    :src_block nil
+;;                    :src_block_end nil
+;;                    :quote nil
+;;                    :quote_end nil)))
+#+end_src
+
+Setting up org-appear
+#+begin_src emacs-lisp
 (use-package! org-appear
   :hook (org-mode . org-appear-mode)
   :config
@@ -1018,7 +1293,7 @@ appropriate.  In tables, insert a new row or end the table."
                     (= heading-start (org-entry-beginning-position)))
                ;; Entry ends on its heading; add newline after
                (end-of-line)
-               (insert "\n\n"))
+               (insert "\n"))
               (t
                ;; Entry ends after its heading; back up
                (forward-line -1)
@@ -1081,6 +1356,12 @@ appropriate.  In tables, insert a new row or end the table."
  :i [return] #'unpackaged/org-return-dwim)
 #+end_src
 
+** Elfeed
+Reading feeds in Emacs. First let's auto-refresh
+
+#+begin_src emacs-lisp
+(add-hook! 'elfeed-search-mode-hook #'elfeed-update)
+#+end_src
 
 ** Font Display
 It seems reasonable to have deadlines in the error face when they're passed.
