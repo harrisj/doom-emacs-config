@@ -315,7 +315,7 @@
         org-use-property-inheritance t            ; it's convenient to have properties inherited
         org-catch-invisible-edits 'smart          ; try not to accidently do weird stuff in invisible regions
         org-log-done 'time                        ; having the time a item is done sounds convenient
-        org-roam-directory "~/org/roam/"          ; same thing, for roam
+        ;;org-roam-directory "~/org/roam/"          ; same thing, for roam
 
         org-hide-emphasis-markers t
         org-pretty-entities t
@@ -433,30 +433,6 @@ allowfullscreen>%s</iframe>" path (or "" desc)))
       :n "g <down>" #'org-forward-heading-same-level
       :n "g <left>" #'org-up-element
       :n "g <right>" #'org-down-element)
-
-(use-package! websocket
-  :after org-roam)
-
-(use-package! org-roam-ui
-  :after org-roam
-  :commands org-roam-ui-open
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
-
-(after! org-roam
-  (setq +org-roam-open-buffer-on-find-file nil))
-
-(defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
-  :around #'doom-modeline-buffer-file-name ; takes no args
-  (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-      (replace-regexp-in-string
-       "\\(?:^\\|.*/\\)\\([0-9]\\{4\\}\\)\\([0-9]\\{2\\}\\)\\([0-9]\\{2\\}\\)[0-9]*-"
-       "🢔(\\1-\\2-\\3) "
-       (subst-char-in-string ?_ ?  buffer-file-name))
-    (funcall orig-fun)))
 
 ;; Prettier labels for ROAM docs
 (defvar org-reference-contraction-max-words 3

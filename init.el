@@ -129,8 +129,8 @@
         +pandoc                     ; export-with-pandoc support
         +gnuplot                    ; who doesn't like pretty pictures
         +pomodoro                   ; be fruitful with the tomato technique
-        +present                    ; using org-mode for presentations
-        +roam2)                     ; wander around notes
+        +present)                    ; using org-mode for presentations
+        ;;+roam2)                     ; wander around notes
        ;;php                        ; perl's insecure younger brother
        ;;plantuml                   ; diagrams for confusing people more
        ;;purescript                 ; javascript, but functional

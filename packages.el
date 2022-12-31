@@ -5,7 +5,6 @@
 (package! doct)
 (package! websocket)
 (package! org-appear)
-(package! org-roam-ui)
 (package! org-preview-html)
 (package! org-modern)
 ;;(package! org-pretty-table)

@@ -255,8 +255,8 @@ emacs-lisp                   ; drown in parentheses
  +pandoc                     ; export-with-pandoc support
  +gnuplot                    ; who doesn't like pretty pictures
  +pomodoro                   ; be fruitful with the tomato technique
- +present                    ; using org-mode for presentations
- +roam2)                     ; wander around notes
+ +present)                    ; using org-mode for presentations
+ ;;+roam2)                     ; wander around notes
 ;;php                        ; perl's insecure younger brother
 ;;plantuml                   ; diagrams for confusing people more
 ;;purescript                 ; javascript, but functional
@@ -339,7 +339,6 @@ come later)
 (package! doct)
 (package! websocket)
 (package! org-appear)
-(package! org-roam-ui)
 (package! org-preview-html)
 (package! org-modern)
 ;;(package! org-pretty-table)
@@ -923,7 +922,7 @@ Disable hl-line-mode by default
         org-use-property-inheritance t            ; it's convenient to have properties inherited
         org-catch-invisible-edits 'smart          ; try not to accidently do weird stuff in invisible regions
         org-log-done 'time                        ; having the time a item is done sounds convenient
-        org-roam-directory "~/org/roam/"          ; same thing, for roam
+        ;;org-roam-directory "~/org/roam/"          ; same thing, for roam
 
         org-hide-emphasis-markers t
         org-pretty-entities t
@@ -1068,7 +1067,7 @@ There also appear to be a few keybindings that use hjkl but not arrow keys
 
 ** Org-Roam
 Lets set up =org-roam-ui=
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (use-package! websocket
   :after org-roam)
 
@@ -1084,13 +1083,13 @@ Lets set up =org-roam-ui=
 
 Now, I want to replace the org-roam buffer with org-roam-ui, to do that, we need
 to disable the regular buffer
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (after! org-roam
   (setq +org-roam-open-buffer-on-find-file nil))
 #+end_src
 
 Let's make it look prettier on the modeline
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defadvice! doom-modeline--buffer-file-name-roam-aware-a (orig-fun)
   :around #'doom-modeline-buffer-file-name ; takes no args
   (if (s-contains-p org-roam-directory (or buffer-file-name ""))
@@ -1102,7 +1101,7 @@ Let's make it look prettier on the modeline
 #+end_src
 
 *** Prettier Labels
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp tangle :no
 ;; Prettier labels for ROAM docs
 (defvar org-reference-contraction-max-words 3
   "Maximum number of words in a reference reference.")
