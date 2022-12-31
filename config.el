@@ -26,8 +26,8 @@
 (setq user-full-name "Jacob Harris"
       user-mail-address "harrisj.home@gmail.com")
 
-(setq doom-font (font-spec :family "Fira Code" :size 13)
-      doom-big-font (font-spec :family "Fira Code" :size 24)
+(setq doom-font (font-spec :family "Iosevka Comfy" :size 13)
+      doom-big-font (font-spec :family "Iosevka Comfy" :size 24)
       doom-variable-pitch-font (font-spec :family "Overpass" :size 13)
       doom-unicode-font (font-spec :family "JuliaMono")
       doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))

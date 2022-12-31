@@ -17,7 +17,7 @@
        (emoji +unicode)
        indent-guides
        (ligatures                   ; ligatures and symbols to make your code pnoretty again
-        +fira +extra)               ; for those who dislike letters
+        +iosevka +extra)               ; for those who dislike letters
        ;;minimap                      ; show a map of the code on the side
        modeline
        ophints                      ; highlight the region an operation acts on
