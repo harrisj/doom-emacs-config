@@ -362,7 +362,6 @@ Let's style this editor (well, more than what Doom does already)
 (package! focus)
 (package! dimmer)
 (package! doom-themes)
-(package! modus-themes)
 (package! solaire-mode)
 
 (package! svg-tag-mode)
@@ -441,104 +440,30 @@ Of course we need to tell emacs who I am
 ;; `load-theme' function. These are the defaults.
 ;;(setq doom-theme 'doom-tomorrow-night)
 
-(require 'modus-themes)
-
-;; Add all your customizations prior to loading the themes
-(setq modus-themes-italic-constructs t
-      modus-themes-bold-constructs nil
-      modus-themes-region '(bg-only no-extend)
-      modus-themes-syntax '(faint alt-syntax)
-      modus-themes-org-blocks 'gray-background
-      modus-themes-tabs-accented t
-      modus-themes-hl-line nil
-      modus-themes-paren-match '(bold intense))
-
-(defun +modus-themes-tweak-packages ()
-    (modus-themes-with-colors
-      (set-face-attribute 'cursor nil :background (modus-themes-color 'blue))
-      (set-face-attribute 'font-lock-type-face nil :foreground (modus-themes-color 'magenta-alt))
-      (custom-set-faces
-       ;; Tweak `evil-mc-mode'
-       `(evil-mc-cursor-default-face ((,class :background ,magenta-intense-bg)))
-       ;; Tweak `git-gutter-mode'
-       `(git-gutter-fr:added ((,class :foreground ,green-fringe-bg)))
-       `(git-gutter-fr:deleted ((,class :foreground ,red-fringe-bg)))
-       `(git-gutter-fr:modified ((,class :foreground ,yellow-fringe-bg)))
-       ;; Tweak `doom-modeline'
-       `(doom-modeline-evil-normal-state ((,class :foreground ,green-alt-other)))
-       `(doom-modeline-evil-insert-state ((,class :foreground ,red-alt-other)))
-       `(doom-modeline-evil-visual-state ((,class :foreground ,magenta-alt)))
-       `(doom-modeline-evil-operator-state ((,class :foreground ,blue-alt)))
-       `(doom-modeline-evil-motion-state ((,class :foreground ,blue-alt-other)))
-       `(doom-modeline-evil-replace-state ((,class :foreground ,yellow-alt)))
-       ;; Tweak `diff-hl-mode'
-       `(diff-hl-insert ((,class :foreground ,green-fringe-bg)))
-       `(diff-hl-delete ((,class :foreground ,red-fringe-bg)))
-       `(diff-hl-change ((,class :foreground ,yellow-fringe-bg)))
-       ;; Tweak `solaire-mode'
-       `(solaire-default-face ((,class :inherit default :background ,bg-alt :foreground ,fg-dim)))
-       `(solaire-line-number-face ((,class :inherit solaire-default-face :foreground ,fg-unfocused)))
-       `(solaire-hl-line-face ((,class :background ,bg-active)))
-       `(solaire-org-hide-face ((,class :background ,bg-alt :foreground ,bg-alt)))
-       ;; Tweak `display-fill-column-indicator-mode'
-       `(fill-column-indicator ((,class :height 0.3 :background ,bg-inactive :foreground ,bg-inactive)))
-       ;; Tweak `mmm-mode'
-       `(mmm-cleanup-submode-face ((,class :background ,yellow-refine-bg)))
-       `(mmm-code-submode-face ((,class :background ,bg-active)))
-       `(mmm-comment-submode-face ((,class :background ,blue-refine-bg)))
-       `(mmm-declaration-submode-face ((,class :background ,cyan-refine-bg)))
-       `(mmm-default-submode-face ((,class :background ,bg-alt)))
-       `(mmm-init-submode-face ((,class :background ,magenta-refine-bg)))
-       `(mmm-output-submode-face ((,class :background ,red-refine-bg)))
-       `(mmm-special-submode-face ((,class :background ,green-refine-bg))))))
-
-(add-hook 'modus-themes-after-load-theme-hook #'+modus-themes-tweak-packages)
-
+;; emacs-plus switching
 (defun my/apply-theme (appearance)
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
 
-  (modus-themes-load-themes)
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
 
-  (pcase appearance
-    ('light (modus-themes-load-operandi))
-    ('dark (modus-themes-load-vivandi))))
+    (pcase appearance
+      ('light (load-theme 'doom-nord-light t))
+      ('dark (load-theme 'doom-nord t)))
 
-
-;; emacs-plus switching
-;;(defun my/apply-theme (appearance)
-;;  "Load theme, taking current system APPEARANCE into consideration."
-;;  (mapc #'disable-theme custom-enabled-themes)
-
-;;  (use-package doom-themes
-;;  :ensure t
-;;  :config
-;;  ;; Global settings (defaults)
-;;  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-;;        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-;;  (pcase appearance
-;;    ('light (load-theme 'doom-tomorrow-day t))
-;;    ('dark (load-theme 'doom-tomorrow-night t)))
-
-;;  (doom-themes-visual-bell-config)
-;;  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-;;  (doom-themes-treemacs-config)
-;;  ;; Corrects (and improves) org-mode's native fontification.
-;;  (doom-themes-org-config)))
+    (doom-themes-visual-bell-config)
+    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)))
 
 
 (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
-
-(defun my-modus-themes-custom-faces ()
-  (modus-themes-with-colors
-    (custom-set-faces
-     ;; Replace green with blue if you use `modus-themes-deuteranopia'.
-     `(git-gutter-fr:added ((,class :foreground ,green-fringe-bg)))
-     `(git-gutter-fr:deleted ((,class :foreground ,red-fringe-bg)))
-     `(git-gutter-fr:modified ((,class :foreground ,yellow-fringe-bg))))))
-
-(add-hook 'modus-themes-after-load-theme-hook #'my-modus-themes-custom-faces)
 #+end_src
 
 ** Line numbers

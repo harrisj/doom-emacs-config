@@ -18,7 +18,6 @@
 (package! focus)
 (package! dimmer)
 (package! doom-themes)
-(package! modus-themes)
 (package! solaire-mode)
 
 (package! svg-tag-mode)
