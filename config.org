@@ -135,7 +135,7 @@ workspaces                   ; tab emulation, persistence & separate workspaces
 ;; tabs
 (treemacs +lsp)              ; Tree view
 unicode
-(vc-gutter +pretty)
+(vc-gutter +diff-hl +pretty)
 vi-tilde-fringe
 window-select
 workspaces
@@ -233,11 +233,11 @@ emacs-lisp                   ; drown in parentheses
             +tree-sitter)    ; all(hope(abandon(ye(who(enter(here))))))
 ;;(julia +lsp)               ; Python, R, and MATLAB in a blender
 (kotlin +lsp)              ; a better, slicker Java(Script)
-(latex                       ; writing papers in Emacs has never been so fun
+;;(latex                       ; writing papers in Emacs has never been so fun
  ;;+fold                     ; fold the clutter away nicities
- +latexmk                    ; modern latex plz
+ ;;+latexmk                    ; modern latex plz
  ;;+cdlatex                  ; quick maths symbols
- +lsp)
+ ;;+lsp)
 ;;lean                       ; proof that mathematicians need help
 ;;factor                     ; for when scripts are stacked against you
 ;;ledger                     ; an accounting system in Emacs
@@ -262,6 +262,7 @@ emacs-lisp                   ; drown in parentheses
 ;;purescript                 ; javascript, but functional
 (python                      ; beautiful is better than ugly
  +lsp
+ +poetry
  +pyright
  +tree-sitter
  +conda)
@@ -588,7 +589,7 @@ Let's also ignore org-mode
 ** Treemacs
 Let's ignore some file types
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (after! treemacs
   (require 'dired)
 
@@ -619,7 +620,7 @@ Let's ignore some file types
 
   ;; Reload treemacs theme
   (setq doom-themes-treemacs-enable-variable-pitch nil
-        doom-themes-treemacs-theme "doom-colors")
+        doom-themes-treemacs-theme "doom-atom")
   (doom-themes-treemacs-config)
 
   (setq treemacs-show-hidden-files nil

@@ -28,7 +28,7 @@
        ;; tabs
        (treemacs +lsp)              ; Tree view
        unicode
-       (vc-gutter +pretty)
+       (vc-gutter +diff-hl +pretty)
        vi-tilde-fringe
        window-select
        workspaces
@@ -107,11 +107,11 @@
                    +tree-sitter)    ; all(hope(abandon(ye(who(enter(here))))))
        ;;(julia +lsp)               ; Python, R, and MATLAB in a blender
        (kotlin +lsp)              ; a better, slicker Java(Script)
-       (latex                       ; writing papers in Emacs has never been so fun
+       ;;(latex                       ; writing papers in Emacs has never been so fun
         ;;+fold                     ; fold the clutter away nicities
-        +latexmk                    ; modern latex plz
+        ;;+latexmk                    ; modern latex plz
         ;;+cdlatex                  ; quick maths symbols
-        +lsp)
+        ;;+lsp)
        ;;lean                       ; proof that mathematicians need help
        ;;factor                     ; for when scripts are stacked against you
        ;;ledger                     ; an accounting system in Emacs
@@ -136,6 +136,7 @@
        ;;purescript                 ; javascript, but functional
        (python                      ; beautiful is better than ugly
         +lsp
+        +poetry
         +pyright
         +tree-sitter
         +conda)
