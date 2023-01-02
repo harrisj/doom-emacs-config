@@ -123,7 +123,7 @@ doom-dashboard               ; a nifty splash screen for Emacs
 ;;doom-quit                    ; DOOM quit-message prompts when you quit Emacs
 (emoji +unicode)
 indent-guides
-(ligatures                   ; ligatures and symbols to make your code pnoretty again
+(ligatures                   ; ligatures and symbols to make your code pretty again
  +iosevka +extra)               ; for those who dislike letters
 ;;minimap                      ; show a map of the code on the side
 modeline
@@ -169,7 +169,7 @@ vterm                        ; the best terminal emulation in Emacs
 #+begin_src emacs-lisp
 syntax                       ; tasing you for every semicolon you forget
 (:if (executable-find "aspell") spell) ; tasing you for misspelling mispelling
-;;(:if (executable-find "languagetool") grammar) ; tasing grammar mistake every you make
+(:if (executable-find "languagetool") grammar) ; tasing grammar mistake every you make
 #+end_src
 
 #+name: doom-tools
@@ -194,6 +194,7 @@ tree-sitter                  ; Syntax and Parsing sitting in a tree
 #+name: doom-os
 #+begin_src emacs-lisp
 (:if IS-MAC macos)           ; improve compatibility with macOS
+tty                          ; for when we need it
 #+end_src
 
 *** Languages
@@ -247,7 +248,7 @@ emacs-lisp                   ; drown in parentheses
 ;;(nix +tree-sitter)         ; I hereby declare "nix geht mehr!"
 ;;ocaml                      ; an objective camel
 (org                         ; organize your plain life in plain text
- ;+pretty                   ; yessss my pretties! (nice unicode symbols)
+ ;+pretty                   ; yessss my pretties! (nice unicode symbols); using org-modern instead
  +dragndrop                  ; drag & drop files/images into org buffers
  ;;+hugo                     ; use Emacs for hugo blogging
  +noter                      ; enhanced PDF notetaking
@@ -269,7 +270,7 @@ emacs-lisp                   ; drown in parentheses
 ;;qt                         ; the 'cutest' gui framework ever
 ;;racket                     ; a DSL for DSLs
 ;;raku                       ; the artist formerly known as perl6
-;;rest                       ; Emacs as a REST client
+rest                       ; Emacs as a REST client
 ;;rst                        ; ReST in peace
 (ruby +rails)                ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
 (rust
@@ -341,6 +342,7 @@ come later)
 (package! org-appear)
 (package! org-preview-html)
 (package! org-modern)
+(package! org-projectile)
 ;;(package! org-pretty-table)
 ;;(package! org-ol-tree)
 #+end_src
@@ -588,7 +590,7 @@ Let's also ignore org-mode
 ** Treemacs
 Let's ignore some file types
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (after! treemacs
   (require 'dired)
 
@@ -1279,6 +1281,23 @@ appropriate.  In tables, insert a new row or end the table."
  :after evil-org
  :map evil-org-mode-map
  :i [return] #'unpackaged/org-return-dwim)
+#+end_src
+
+** Org Projectile
+
+Let's setup a file for all our todos
+
+#+begin_src emacs-lisp
+(use-package org-projectile
+  :bind (("C-c n p" . org-projectile-project-todo-completing-read)
+         ("C-c c" . org-capture))
+  :config
+  (progn
+    (setq org-projectile-projects-file
+          "~/org/projectile.org"
+    (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+    (push (org-projectile-project-todo-entry) org-capture-templates))
+  :ensure t)
 #+end_src
 
 ** Elfeed

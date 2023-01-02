@@ -7,6 +7,7 @@
 (package! org-appear)
 (package! org-preview-html)
 (package! org-modern)
+(package! org-projectile)
 ;;(package! org-pretty-table)
 ;;(package! org-ol-tree)
 

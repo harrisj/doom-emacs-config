@@ -16,7 +16,7 @@
        ;;doom-quit                    ; DOOM quit-message prompts when you quit Emacs
        (emoji +unicode)
        indent-guides
-       (ligatures                   ; ligatures and symbols to make your code pnoretty again
+       (ligatures                   ; ligatures and symbols to make your code pretty again
         +iosevka +extra)               ; for those who dislike letters
        ;;minimap                      ; show a map of the code on the side
        modeline
@@ -54,7 +54,7 @@
        :checkers
        syntax                       ; tasing you for every semicolon you forget
        (:if (executable-find "aspell") spell) ; tasing you for misspelling mispelling
-       ;;(:if (executable-find "languagetool") grammar) ; tasing grammar mistake every you make
+       (:if (executable-find "languagetool") grammar) ; tasing grammar mistake every you make
 
        :tools
        ;;biblio                       ; Writes a PhD for you (citation needed)
@@ -75,6 +75,7 @@
 
        :os
        (:if IS-MAC macos)           ; improve compatibility with macOS
+       tty                          ; for when we need it
 
        :lang
        ;;agda                       ; types of types of types of types...
@@ -121,7 +122,7 @@
        ;;(nix +tree-sitter)         ; I hereby declare "nix geht mehr!"
        ;;ocaml                      ; an objective camel
        (org                         ; organize your plain life in plain text
-        ;+pretty                   ; yessss my pretties! (nice unicode symbols)
+        ;+pretty                   ; yessss my pretties! (nice unicode symbols); using org-modern instead
         +dragndrop                  ; drag & drop files/images into org buffers
         ;;+hugo                     ; use Emacs for hugo blogging
         +noter                      ; enhanced PDF notetaking
@@ -143,7 +144,7 @@
        ;;qt                         ; the 'cutest' gui framework ever
        ;;racket                     ; a DSL for DSLs
        ;;raku                       ; the artist formerly known as perl6
-       ;;rest                       ; Emacs as a REST client
+       rest                       ; Emacs as a REST client
        ;;rst                        ; ReST in peace
        (ruby +rails)                ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        (rust
