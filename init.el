@@ -75,7 +75,7 @@
 
        :os
        (:if IS-MAC macos)           ; improve compatibility with macOS
-       tty                          ; for when we need it
+       ;;tty                          ; for when we need it
 
        :lang
        ;;agda                       ; types of types of types of types...

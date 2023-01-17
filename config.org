@@ -194,7 +194,7 @@ tree-sitter                  ; Syntax and Parsing sitting in a tree
 #+name: doom-os
 #+begin_src emacs-lisp
 (:if IS-MAC macos)           ; improve compatibility with macOS
-tty                          ; for when we need it
+;;tty                          ; for when we need it
 #+end_src
 
 *** Languages
@@ -554,8 +554,19 @@ I think the LSP is a bit intrusive (especially with inline suggestions), so lets
         lsp-ui-doc-enable nil))     ; redundant with K
 #+end_src
 
+*** Java Settings for LSP
+Use the Google Code formatter
+
+#+begin_src emacs-lisp
+(setq lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+(setq lsp-java-format-settings-profile "GoogleStyle")
+(add-hook 'java-mode-hook (defun my-set-java-tab-width () (setq tab-width 2)))
+#+end_src
+
+
 ** Company
 I think company is a bit too quick to recommend some stuff
+
 #+begin_src emacs-lisp
 (after! company
   (setq company-idle-delay 0.1
@@ -1293,8 +1304,7 @@ Let's setup a file for all our todos
          ("C-c c" . org-capture))
   :config
   (progn
-    (setq org-projectile-projects-file
-          "~/org/projectile.org"
+    (setq org-projectile-projects-file "~/org/projectile.org")
     (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
     (push (org-projectile-project-todo-entry) org-capture-templates))
   :ensure t)
@@ -1349,3 +1359,53 @@ Since have just gone to so much effort above let's make the most of it by making
           (verbatim . verb))))
 #+end_src
 
+*** Org Capture Popup
+
+Idea inspired by [[https://macowners.club/posts/org-capture-from-everywhere-macos/]]
+
+#+begin_src emacs-lisp :tangle no
+(defun harrisj-func-make-capture-frame ()
+  "Create a new frame and run `org-capture'."
+  (interactive)
+
+  (make-frame '((name . "capture")
+                (top . 300)
+                (left . 700)
+                (width . 80)
+                (height . 25)))
+
+  (select-frame-by-name "capture")
+
+  (delete-other-windows)
+
+  (noflet ((switch-to-buffer-other-window (buf) (switch-to-buffer buf)))
+          (org-capture)))
+
+
+(defadvice org-capture-finalize
+    (after delete-capture-frame activate)
+  "Advise capture-finalize to close the frame."
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+
+
+(defadvice org-capture-destroy
+    (after delete-capture-frame activate)
+  "Advise capture-destroy to close the frame."
+  (if (equal "capture" (frame-parameter nil 'name))
+      (delete-frame)))
+#+end_src
+
+** Mu4E
+
+Let's see if this is a good idea or not!
+
+Configuring msmtp
+#+begin_src emacs-lisp :tangle no
+(after! mu4e
+  (setq sendmail-program (executable-find "msmtp")
+	send-mail-function #'smtpmail-send-it
+	message-sendmail-f-is-evil t
+	message-sendmail-extra-arguments '("--read-envelope-from")
+	message-send-mail-function #'message-send-mail-with-sendmail))
+#+end_src

@@ -101,6 +101,10 @@
   (setq lsp-ui-sideline-enable nil  ; no more useful than flycheck
         lsp-ui-doc-enable nil))     ; redundant with K
 
+(setq lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
+(setq lsp-java-format-settings-profile "GoogleStyle")
+(add-hook 'java-mode-hook (defun my-set-java-tab-width () (setq tab-width 2)))
+
 (after! company
   (setq company-idle-delay 0.1
         company-selection-wrap-around t
@@ -676,8 +680,7 @@ appropriate.  In tables, insert a new row or end the table."
          ("C-c c" . org-capture))
   :config
   (progn
-    (setq org-projectile-projects-file
-          "~/org/projectile.org"
+    (setq org-projectile-projects-file "~/org/projectile.org")
     (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
     (push (org-projectile-project-todo-entry) org-capture-templates))
   :ensure t)
