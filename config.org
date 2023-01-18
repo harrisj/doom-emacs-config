@@ -846,6 +846,11 @@ To use this we'll just hook it into =Info=.
 (add-hook 'Info-selection-hook 'info-colors-fontify-node)
 #+end_src
 
+** Splash Screen Tweak
+
+#+begin_src emacs-lisp
+(setq fancy-splash-image "~/.config/doom/legospace.png")
+#+end_src
 
 ** Marginalia
 More small tweaks

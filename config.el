@@ -319,6 +319,8 @@
 
 (add-hook 'Info-selection-hook 'info-colors-fontify-node)
 
+(setq fancy-splash-image "~/.config/doom/legospace.png")
+
 (after! marginalia
   (setq marginalia--ellipsis "…"    ; Nicer ellipsis
         marginalia-align 'right     ; right alignment
