@@ -19,7 +19,6 @@
 (package! dimmer)
 (package! doom-themes)
 (package! solaire-mode)
-
 (package! svg-tag-mode)
 
 (package! vundo

@@ -188,6 +188,7 @@ lsp                          ; Language Server Protocol
  +forge)                     ; interface with git forges
 pdf                          ; pdf enhancements
 rgb                          ; creating color strings
+terraform
 tree-sitter                  ; Syntax and Parsing sitting in a tree
 #+end_src
 
@@ -365,7 +366,6 @@ Let's style this editor (well, more than what Doom does already)
 (package! dimmer)
 (package! doom-themes)
 (package! solaire-mode)
-
 (package! svg-tag-mode)
 
 (package! vundo
@@ -466,6 +466,12 @@ Of course we need to tell emacs who I am
 
 
 (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+#+end_src
+
+** Maximize
+
+#+begin_src emacs-lisp
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
 #+end_src
 
 ** Line numbers
@@ -847,6 +853,7 @@ To use this we'll just hook it into =Info=.
 #+end_src
 
 ** Splash Screen Tweak
+I never liked the Doom Emacs logo
 
 #+begin_src emacs-lisp
 (setq fancy-splash-image "~/.config/doom/legospace.png")
@@ -877,6 +884,7 @@ More small tweaks
 #+end_src
 
 Similar to that, I want to dim surrounding text using the focus package
+
 #+begin_src emacs-lisp
 (defun add-list-to-list (dst src)
   "Similar to `add-to-list', but accepts a list as 2nd argument"
