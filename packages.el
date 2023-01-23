@@ -30,6 +30,7 @@
 (package! nov)
 (package! lexic)
 (package! info-colors)
+(package! xit-mode)
 (package! magit-delta :recipe (:host github :repo "dandavison/magit-delta"))
 
 (package! magit-pretty-graph
