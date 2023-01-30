@@ -353,7 +353,7 @@ Some additional and useful programming packages
 
 #+name: programming
 #+begin_src emacs-lisp
-(package! protobuf-mode)
+;; Any other programming-specific packages can go here
 #+end_src
 
 
@@ -780,12 +780,6 @@ Let's not include Emacs packages as projects to remember
 (defun projectile-ignored-project-function (filepath)
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
-#+end_src
-
-** Protobuf
-
-#+begin_src emacs-lisp
-(require 'protobuf-mode)
 #+end_src
 
 ** Misc. Emacs Defaults

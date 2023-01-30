@@ -12,7 +12,7 @@
 ;;(package! org-ol-tree)
 
 ;;programming
-(package! protobuf-mode)
+;; Any other programming-specific packages can go here
 
 ;;looks
 (package! focus)
