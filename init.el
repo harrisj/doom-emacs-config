@@ -60,6 +60,7 @@
        ;;biblio                       ; Writes a PhD for you (citation needed)
        (debugger +lsp)              ; FIXME stepping through code, to help you add bugs
        direnv
+       docker
        editorconfig
        (eval +overlay)              ; run code, run (also, repls)
        gist

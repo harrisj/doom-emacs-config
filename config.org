@@ -177,6 +177,7 @@ syntax                       ; tasing you for every semicolon you forget
 ;;biblio                       ; Writes a PhD for you (citation needed)
 (debugger +lsp)              ; FIXME stepping through code, to help you add bugs
 direnv
+docker
 editorconfig
 (eval +overlay)              ; run code, run (also, repls)
 gist
@@ -354,6 +355,20 @@ Some additional and useful programming packages
 #+name: programming
 #+begin_src emacs-lisp
 ;; Any other programming-specific packages can go here
+
+;; REMOVE WHEN ON EMACS 29
+;;(package! transient
+;;      :pin "c2bdf7e12c530eb85476d3aef317eb2941ab9440"
+;;      :recipe (:host github :repo "magit/transient"))
+
+;;(package! with-editor
+;;          :pin "bbc60f68ac190f02da8a100b6fb67cf1c27c53ab"
+;;          :recipe (:host github :repo "magit/with-editor"))
+
+
+;; Python packages
+(package! virtualenvwrapper)
+(package! python-black)
 #+end_src
 
 
@@ -570,6 +585,14 @@ Use the Google Code formatter
 (add-hook 'java-mode-hook (defun my-set-java-tab-width () (setq tab-width 2)))
 #+end_src
 
+** Python
+Some settings for Black formatting
+
+#+begin_src emacs-lisp
+(use-package! python-black
+  :after python
+  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+#+end_src
 
 ** Company
 I think company is a bit too quick to recommend some stuff

@@ -107,6 +107,10 @@
 (setq lsp-java-format-settings-profile "GoogleStyle")
 (add-hook 'java-mode-hook (defun my-set-java-tab-width () (setq tab-width 2)))
 
+(use-package! python-black
+  :after python
+  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+
 (after! company
   (setq company-idle-delay 0.1
         company-selection-wrap-around t
