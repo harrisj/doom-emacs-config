@@ -103,10 +103,6 @@
   (setq lsp-ui-sideline-enable nil  ; no more useful than flycheck
         lsp-ui-doc-enable nil))     ; redundant with K
 
-(setq lsp-java-format-settings-url "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml")
-(setq lsp-java-format-settings-profile "GoogleStyle")
-(add-hook 'java-mode-hook (defun my-set-java-tab-width () (setq tab-width 2)))
-
 (use-package! python-black
   :after python
   :hook (python-mode . python-black-on-save-mode-enable-dwim))

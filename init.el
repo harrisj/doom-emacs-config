@@ -105,11 +105,11 @@
        ;;hy                         ; readability of scheme w/ speed of python
        ;;idris                      ;
        (json +lsp +tree-sitter)     ; At least it ain't XML
-       (java +lsp +tree-sitter)     ; the poster child for carpal tunnel syndrome
+       ;;(java +lsp +tree-sitter)     ; the poster child for carpal tunnel syndrome
        (javascript +lsp
                    +tree-sitter)    ; all(hope(abandon(ye(who(enter(here))))))
        ;;(julia +lsp)               ; Python, R, and MATLAB in a blender
-       (kotlin +lsp)              ; a better, slicker Java(Script)
+       ;;(kotlin +lsp)              ; a better, slicker Java(Script)
        ;;(latex                       ; writing papers in Emacs has never been so fun
         ;;+fold                     ; fold the clutter away nicities
         ;;+latexmk                    ; modern latex plz
@@ -129,10 +129,10 @@
         ;;+hugo                     ; use Emacs for hugo blogging
         +noter                      ; enhanced PDF notetaking
         +jupyter                    ; ipython/jupyter support for babel
-        +pandoc                     ; export-with-pandoc support
-        +gnuplot                    ; who doesn't like pretty pictures
-        +pomodoro                   ; be fruitful with the tomato technique
-        +present)                    ; using org-mode for presentations
+        +pandoc)                     ; export-with-pandoc support
+        ;; +gnuplot                    ; who doesn't like pretty pictures
+        ;; +pomodoro                   ; be fruitful with the tomato technique
+        ;; +present)                    ; using org-mode for presentations
         ;;+roam2)                     ; wander around notes
        ;;php                        ; perl's insecure younger brother
        ;;plantuml                   ; diagrams for confusing people more
