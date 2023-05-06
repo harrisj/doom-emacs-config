@@ -72,7 +72,7 @@
         +forge)                     ; interface with git forges
        pdf                          ; pdf enhancements
        rgb                          ; creating color strings
-       terraform
+       ;;terraform
        tree-sitter                  ; Syntax and Parsing sitting in a tree
 
        :os
