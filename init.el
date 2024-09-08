@@ -57,13 +57,13 @@
        (:if (executable-find "languagetool") grammar) ; tasing grammar mistake every you make
 
        :tools
+       ansible
        ;;biblio                       ; Writes a PhD for you (citation needed)
        (debugger +lsp)              ; FIXME stepping through code, to help you add bugs
        direnv
        docker
        editorconfig
        (eval +overlay)              ; run code, run (also, repls)
-       gist
        (lookup                      ; helps you navigate your code and documentation
         +dictionary                 ; dictionary/thesaurus is nice
         +docsets)                   ; ...or in Dash docsets locally
@@ -71,7 +71,6 @@
        (magit                       ; a git porcelain for Emacs
         +forge)                     ; interface with git forges
        pdf                          ; pdf enhancements
-       rgb                          ; creating color strings
        ;;terraform
        tree-sitter                  ; Syntax and Parsing sitting in a tree
 

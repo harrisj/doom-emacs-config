@@ -174,13 +174,13 @@ syntax                       ; tasing you for every semicolon you forget
 
 #+name: doom-tools
 #+begin_src emacs-lisp
+ansible
 ;;biblio                       ; Writes a PhD for you (citation needed)
 (debugger +lsp)              ; FIXME stepping through code, to help you add bugs
 direnv
 docker
 editorconfig
 (eval +overlay)              ; run code, run (also, repls)
-gist
 (lookup                      ; helps you navigate your code and documentation
  +dictionary                 ; dictionary/thesaurus is nice
  +docsets)                   ; ...or in Dash docsets locally
@@ -188,7 +188,6 @@ lsp                          ; Language Server Protocol
 (magit                       ; a git porcelain for Emacs
  +forge)                     ; interface with git forges
 pdf                          ; pdf enhancements
-rgb                          ; creating color strings
 ;;terraform
 tree-sitter                  ; Syntax and Parsing sitting in a tree
 #+end_src
@@ -794,6 +793,11 @@ Let's not include Emacs packages as projects to remember
 (defun projectile-ignored-project-function (filepath)
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
+#+end_src
+
+Let's not include $HOME as the project-root
+#+begin_src emacs-lisp
+(after! projectile (setq projectile-project-root-files-bottom-up (remove ".git" projectile-project-root-files-bottom-up)))
 #+end_src
 
 ** Misc. Emacs Defaults
